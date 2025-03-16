@@ -1,0 +1,9 @@
+openai
+dotenv
+fastapi
+python-multipart
+psycopg2-binary
+bcrypt
+fastapi-jwt
+python-jose
+authlib
