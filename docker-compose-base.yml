@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  code_pg:
+    container_name: code_pg
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_PASSWORD=pg123456
+      - POSTGRES_USER=postgre
+      - POSTGRES_DB=gsk
+    volumes:
+      - pg_code_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --requirepass redis123456 --appendonly yes
+    environment:
+      - REDIS_PASSWORD=redis123456
+    restart: unless-stopped
+
+volumes:
+  pg_code_data:
+    driver: local
+  redis_data:
+    driver: local

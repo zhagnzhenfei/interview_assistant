@@ -1,0 +1,19 @@
+openai
+uvicorn
+dotenv
+fastapi
+python-multipart
+psycopg2-binary
+bcrypt
+fastapi-jwt
+python-jose
+authlib
+sqlalchemy
+stripe
+aioredis
+redis>=4.5.0
+aiofiles
+pydantic>=2.0.0
+python-dotenv
+alembic  # For database migrations
+tencentcloud-sdk-python-sms

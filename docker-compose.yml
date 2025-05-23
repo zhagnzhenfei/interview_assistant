@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  paijie_api:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    hostname: paijie_api
+    container_name: paijie_api
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
+    ports:
+      - "8002:8000"  # 将主机的 8000 端口映射到容器的 8000 端口
+    volumes:
+      - ./app:/app/app  # 将主机的 app 目录挂载到容器中
+    environment:
+      - REDIS_URL=redis://:redis123456@redis:6379/0
+    depends_on:
+      - code_pg
+      - redis
+    restart: unless-stopped
+
+  code_pg:
+    container_name: code_pg
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_PASSWORD=pg123456
+      - POSTGRES_USER=postgre
+      - POSTGRES_DB=gsk
+    volumes:
+      - pg_code_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    # ports:
+    #   - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --requirepass redis123456 --appendonly yes
+    environment:
+      - REDIS_PASSWORD=redis123456
+    restart: unless-stopped
+
+volumes:
+  pg_code_data:
+    driver: local
+  redis_data:
+    driver: local
